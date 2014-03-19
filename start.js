@@ -1,5 +1,3 @@
-#!/bin/env node
-
 var http = require("http");
 //var mysql = require('mysql');
 var controller = require("./controllers/controller");
@@ -24,8 +22,6 @@ var templateService = require("./services/templateService");
 //	});
 
 //});
-
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 controller.Init(securiteService, securiteService, requestService, templateService);
 
