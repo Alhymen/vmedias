@@ -126,11 +126,11 @@ var SampleApp = function() {
 
         self.routes['/images/*'] = function(req, res) {
 			console.log ("image !!!");
-/*			if (req.headers["if-none-match"]) {
+			if (req.headers["if-none-match"]) {
 				res.writeHead(304, {"Content-Type": "image/png", "etag" : "33030"});
 				res.end ();
 			}
-			else {*/
+			else {
 				fs.open("images/" + req.params[0], "r", function(err, fd) {
 					if (err) {
 						console.log ("ERREUR : n°" + err.errno + ":" + err.code + " path : " + err.path);
@@ -148,7 +148,7 @@ var SampleApp = function() {
 					});
 				//fs.close(fd); TODO fermer tous les fichiers avant de supprimer le dossier à la fin de vie du serveur
 				});		
-//			}
+			}
         };
 		
         self.routes['/ajax/*'] = function(req, res) {
@@ -176,42 +176,42 @@ var SampleApp = function() {
         };
 
         self.routes['/lien1.html'] = self.routes['/'] = function(req, res) {
-/*			if (req.headers["if-none-match"]) {
+			if (req.headers["if-none-match"]) {
 				res.writeHead(304, {"Content-Type": "text/html", "etag" : "5483-1387485461001"});
 				res.end ();
 			}
-			else {*/
+			else {
 				templateSystem.Get ("lien1.tpl", {}, function (content){
 					res.writeHead(200, {"Content-Type": "text/html", "etag" : "5483-1387485461001"});
 					res.end (content);
 				});
-//			}
+			}
         };
 		
         self.routes['/lien2.html'] = self.routes['/'] = function(req, res) {
-/*			if (req.headers["if-none-match"]) {
+			if (req.headers["if-none-match"]) {
 				res.writeHead(304, {"Content-Type": "text/html", "etag" : "5483-1387485461002"});
 				res.end ();
 			}
-			else {*/
+			else {
 				templateSystem.Get ("lien2.tpl", {}, function (content){
 					res.writeHead(200, {"Content-Type": "text/html", "etag" : "5483-1387485461002"});
 					res.end (content);
 				});
-//			}
+			}
         };
 
         self.routes['/index.html'] = self.routes['/'] = function(req, res) {
-/*			if (req.headers["if-none-match"]) {
+			if (req.headers["if-none-match"]) {
 				res.writeHead(304, {"Content-Type": "text/html", "etag" : "5483-1387485461000"});
 				res.end ();
 			}
-			else {*/
+			else {
 				templateSystem.Get ("index.tpl", {}, function (content){
 					res.writeHead(200, {"Content-Type": "text/html", "etag" : "5483-1387485461000"});
 					res.end (content);
 				});
-//			}
+			}
         };
 		
 	    self.routes['/hello.html'] = function(req, res) {
