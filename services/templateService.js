@@ -4,4 +4,4 @@ TemplateService.prototype = {
 
 }
 
-module.exports = new TemplateService();
+module.exports = TemplateService;

@@ -1,6 +1,11 @@
 var Url = require('url')
 var Vm = require('vm');
 var Parallel = require('../services/parallelService');
+var SecuriteService = require("../services/securiteService");
+var ErrorService = require("../services/errorService");
+var RequestService = require("../services/requestService");
+var TemplateService = require("../services/templateService");
+var ContextService = require("../services/contextService");
 
 function Controller() { }
  
@@ -8,11 +13,7 @@ function Controller() { }
 // Parses url and chooses the good controller to call
 Controller.prototype = {
 	// First method to call in order to configure the master controller
-	Init: function (securiteService, errorService, requestService, templateService) {
-		this.SecuriteService = securiteService;
-		this.ErrorService = errorService;
-		this.RequestService = requestService;
-		this.TemplateService = templateService;
+	Init: function () {
 		this.queue = [];
 	},
 	// Analyses and Executes the request of the client
@@ -25,12 +26,21 @@ Controller.prototype = {
 
 		var that = this;
 		var reqVm;
-		var context;
+
+		var vmContext = null;
+
+
 
 		Parallel.RunNew(function () {
+
 			// We Get the controller name, the action name and the arguments
 			var url = Url.parse(request.url, true);
-			var req = that.GetControllerAndAction(url.pathname);
+
+			var contextService = new ContextService();
+			contextService.Init(new SecuriteService(), new ErrorService(), new RequestService(), new TemplateService());
+			contextService.requestService.Init(url.pathname, response);
+
+			var req = contextService.requestService.GetControllerAndAction();
 			var args = url.query;
 
 			// We generate the string for the call of the action of a contreoler
@@ -43,34 +53,17 @@ Controller.prototype = {
 			reqVm += ");";
 
 			// The context for the execution of the action
-			context = {
+			vmContext = {
 				resp: '',
 				controller: require("./" + req.Controller + "Controller")
-			}
+			};
+
+			vmContext.controller.Init(contextService);
 
 		}).Continue(function () {
 			// We run the action
-			Vm.runInNewContext(reqVm, context);
+			Vm.runInNewContext(reqVm, vmContext);
 		});
-	},
-	// Get the controller and the action from an URI
-	GetControllerAndAction: function (uri) {
-		var len = uri.length;
-
-		if (len >= 1) {
-			if (uri == '/')
-				return ({ Controller: 'home', Action: 'index' })
-			if (uri[0] == '/' && (len > 1)) {
-				uri = uri.substr(1, len - 1);
-				var posSlash = uri.indexOf('/');
-				if (posSlash > 0) {
-					return ({ Controller: uri.substr(0, posSlash), Action: uri.substr(posSlash + 1, len) })
-				}
-				return ({ Controller: uri, Action: 'index' })
-			}
-		}
-
-		throw "error url";
 	}
 }
 

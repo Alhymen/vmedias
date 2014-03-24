@@ -1,37 +1,39 @@
-var mysql = require('mysql');
+var mongo = require('mongodb');
 
 function homeController() { }
 
-function Context(response) {
-	this.Return = function (resp) {
-		response.writeHead(200, { "Content-Type": "text/plain" });
-		response.write(resp);
-		response.end();
-	}
-}
-
 homeController.prototype = {
-	_context: null,
-	Init: function (context) {
-		this._context = context;
+	_contextService: null,
+	Init: function (contextService) {
+		this._contextService = contextService;
 	},
 	index: function () {
-		var client = mysql.createConnection({
-			host: 'f70969e1-ba35-42aa-a31a-a2e801344c87.mysql.sequelizer.com',
-			user: 'oozlsaowbpyfpjje',
-			password: 'UPFnynJ7PtNnBwDmSegtBgYAx8YJmQGBXkjentAu85UwvuyNgTCFpcQNXeWyv8T7',
-			database: 'dbf70969e1ba3542aaa31aa2e801344c87',
-		});
+		var MongoClient = mongo.MongoClient;
+		var that = this;
+		var Db = mongo.Db,
+			Connection = mongo.Connection,
+			Server = mongo.Server;
 
-		client.connect(function (err) {
-			var query = client.query('select * from valentinosony', function (err, result) {
-				Context.View(query);
-				Context.Model(query);
+		var myCollection;
+
+		var db = MongoClient.connect("mongodb://localhost:" + Connection.DEFAULT_PORT + "/vmedias", function (err, db) {
+			if (err)
+				throw err;
+			console.log("connecter avec MongoDB !");
+			myCollection = db.collection('user');
+			myCollection.find().toArray(function (err, results) {
+				if (err)
+					throw err;
+				console.log("results :", results);
+
+				that._contextService.requestService.View(results[0].nom);
 			});
 		});
+
+		
 	},
 	detail: function () {
-		return "";
+		
 	}
 }
 
