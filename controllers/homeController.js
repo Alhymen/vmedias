@@ -2,8 +2,18 @@ var mysql = require('mysql');
 
 function homeController() { }
 
+function Context(response) {
+	this.Return = function (resp) {
+		response.writeHead(200, { "Content-Type": "text/plain" });
+		response.write(resp);
+		response.end();
+	}
+}
+
 homeController.prototype = {
-	Init: function () {
+	_context: null,
+	Init: function (context) {
+		this._context = context;
 	},
 	index: function () {
 		var client = mysql.createConnection({
@@ -15,7 +25,8 @@ homeController.prototype = {
 
 		client.connect(function (err) {
 			var query = client.query('select * from valentinosony', function (err, result) {
-				return result;
+				Context.View(query);
+				Context.Model(query);
 			});
 		});
 	},

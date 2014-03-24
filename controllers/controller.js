@@ -51,12 +51,6 @@ Controller.prototype = {
 		}).Continue(function () {
 			// We run the action
 			Vm.runInNewContext(reqVm, context);
-		}).Continue(function () {
-			// We answer the client
-			var resp = context.resp;
-			response.writeHead(200, { "Content-Type": "text/plain" });
-			response.write(resp);
-			response.end();
 		});
 	},
 	// Get the controller and the action from an URI
