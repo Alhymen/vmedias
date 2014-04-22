@@ -25,7 +25,8 @@ homeController.prototype = {
 				if (err)
 					throw err;
 				console.log("results :", results);
-
+				context.model = mongo.getclient();
+				templateservice.write(context);
 				that._contextService.requestService.View(results[0].nom);
 			});
 		});
@@ -38,3 +39,88 @@ homeController.prototype = {
 }
 
 module.exports = new homeController();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//function getUlClients(client) {
+//	var ulRet;
+
+//	ulRet = cache.get("getUlClients", "clients", function () {
+		
+//		var ul = "<ul>";
+//		for (var client in clients) {
+//			ul += "<li>" + client.nom + "</li>";
+//		}
+
+//		ul += "</ul>";
+
+//		return ul;
+//	});
+
+//	return ulRet;
+//}
+
+//function getDivClients(client) {
+//	var divRet;
+
+//	divRet = cache.get("getDivClients", "clients", function () {
+		
+//		var div = "<div>";
+//		for (var client in clients) {
+//			div += "<div>" + client.nom + "</div>";
+//		}
+
+//		ul += "</div>";
+
+//		return div;
+//	});
+
+//	return divRet;
+//}
+
+//function updateClient() {
+//	mongo.client.update({});
+//	cache.update("clients");
+//}
+
+
+///*
+//getUlClients() =>
+
+//<ul>
+//	<li>a</li>
+//	<li>b</li>
+//	<li>c</li>
+//	<li>d</li>
+//</ul>
+
+//*/
+
+
+
+
+
+
+
+
