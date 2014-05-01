@@ -4,4 +4,4 @@ ErrorService.prototype = {
 	
 }
 
-module.exports = new ErrorService();
+module.exports = ErrorService;

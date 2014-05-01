@@ -1,15 +1,41 @@
-function homeController() { }
+var mongo = require('mongodb');
+var ControllerCore = require('./controllerCore.js');
 
-homeController.prototype = {
-	Init: function () {
-	},
-	index: function () {
+function HomeController() { }
 
-		return process.env.OPENSHIFT_MYSQL_DB_URL || "looooooooooooooooooool";
-	},
-	detail: function () {
-		return "";
-	}
-}
+HomeController.prototype = ControllerCore.extend ({
+	index: function (args, response, isAjax) {
+		var MongoClient = mongo.MongoClient;
+		var that = this;
+		var Db = mongo.Db,
+			Connection = mongo.Connection,
+			Server = mongo.Server;
 
-module.exports = new homeController();
+		var myCollection;
+        var result;
+        var paramsTpl={name:"Wallah"};
+/*		var db = MongoClient.connect("mongodb://localhost:" + Connection.DEFAULT_PORT + "/vmedias", function (err, db) {
+			if (err)
+				throw err;
+			console.log("connecter avec MongoDB !");
+			myCollection = db.collection('user');
+			myCollection.find().toArray(function (err, results) {
+				if (err)
+					throw err;
+				console.log("results :", results);
+
+				that._contextService.requestService.View(results[0].nom);
+			});
+		});
+*/
+
+/*        if (!isAjax) {
+            result = this.contextService.templateService.DisplayViewHTML(this.GetTemplatePath("index"), paramsTpl);
+        }
+        else{
+            result = this.contextService.templateService.DisplayViewJSON(paramsTpl);
+        }*/
+        //this.RenderView ("coucou", response);
+    }
+});
+module.exports = new HomeController();

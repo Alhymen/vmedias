@@ -1,33 +1,32 @@
-#!/bin/env node
-
 var http = require("http");
-//var mysql = require('mysql');
 var controller = require("./controllers/controller");
-
 var securiteService = require("./services/securiteService");
 var errorService = require("./services/errorService");
 var requestService = require("./services/requestService");
 var templateService = require("./services/templateService");
+var contextService = require("./services/contextService");
+
+contextService.Init(securiteService, errorService, requestService, templateService);
+
 //var benchmark = require("./services/benchmark");
 
-//var client= mysql.createConnection({
-//	host     : 'f70969e1-ba35-42aa-a31a-a2e801344c87.mysql.sequelizer.com',
-//	user     : 'oozlsaowbpyfpjje',
-//	password : 'UPFnynJ7PtNnBwDmSegtBgYAx8YJmQGBXkjentAu85UwvuyNgTCFpcQNXeWyv8T7',
-//	database : 'dbf70969e1ba3542aaa31aa2e801344c87',
-//});
+//var mongo = require('mongodb');
 
-//client.connect(function(err) {
-//	var post  = {id: 1, title: 'Hello MySQL'};
-//	var query = client.query('select * from valentinosony', function(err, result) {
-//		console.log(result);
+//var MongoClient = mongo.MongoClient;
+//var Db = mongo.Db, Connection = mongo.Connection, Server = mongo.Server;
+//var myCollection;
+//var db = MongoClient.connect("mongodb://localhost:" + Connection.DEFAULT_PORT + "/vmedias", function (err, db) {
+//	if (err)
+//		throw err;
+//	console.log("connecter avec MongoDB !");
+//	myCollection = db.collection('user');
+//	myCollection.find().toArray(function (err, results) {
+//		if (err)
+//			throw err;
+//		console.log("results :", results);
 //	});
-
 //});
 
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-
-controller.Init(securiteService, securiteService, requestService, templateService);
+controller.Init(contextService);
 
 http.createServer(function (request, response) { controller.ExecuteRequest(request, response) }).listen(8080);
-
