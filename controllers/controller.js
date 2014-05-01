@@ -1,10 +1,10 @@
 var Url = require('url');
 var benchmark=require('../services/benchmarkService');
-var SecuriteService = require("../services_bis/securiteService");
+/*var SecuriteService = require("../services_bis/securiteService");
 var ErrorService = require("../services_bis/errorService");
 var RequestService = require("../services_bis/requestService");
 var TemplateService = require("../services_bis/templateService");
-var ContextService = require("../services_bis/contextService");
+var ContextService = require("../services_bis/contextService");*/
 var Vm = require('vm');
 function Controller() { }
 
@@ -46,7 +46,7 @@ Controller.prototype = {
             that.controllers[req.controller+"Controller"][req.action](args, response, req.ajax);
         },
         function(){
-            req = that.contextService.requestService.GetControllerAndAction(url.pathname);
+            /*req = that.contextService.requestService.GetControllerAndAction(url.pathname);
             var contextService = new ContextService();
             contextService.Init(new SecuriteService(), new ErrorService(), new RequestService(), new TemplateService());
             contextService.requestService.Init(url.pathname, response);
@@ -67,7 +67,7 @@ Controller.prototype = {
 
             vmContext.controller.Init(contextService);
 
-            Vm.runInNewContext(reqVm, vmContext);
+            Vm.runInNewContext(reqVm, vmContext);*/
 
         }, 10000);
         // parsing to isolate controller and action names
