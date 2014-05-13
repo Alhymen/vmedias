@@ -1,6 +1,12 @@
 var http = require("http");
 var controller = require("./controllers/controller");
+var securiteService = require("./services/securiteService");
+var errorService = require("./services/errorService");
+var requestService = require("./services/requestService");
+var templateService = require("./services/templateService");
+var contextService = require("./services/contextService");
 
+contextService.Init(securiteService, errorService, requestService, templateService);
 
 //var benchmark = require("./services/benchmark");
 
@@ -21,6 +27,6 @@ var controller = require("./controllers/controller");
 //	});
 //});
 
-controller.Init();
+controller.Init(contextService);
 
 http.createServer(function (request, response) { controller.ExecuteRequest(request, response) }).listen(8080);
