@@ -1,78 +1,64 @@
 var Url = require('url');
-var benchmark=require('../services/benchmarkService');
-/*var SecuriteService = require("../services_bis/securiteService");
-var ErrorService = require("../services_bis/errorService");
-var RequestService = require("../services_bis/requestService");
-var TemplateService = require("../services_bis/templateService");
-var ContextService = require("../services_bis/contextService");*/
-var Vm = require('vm');
+var ContextPrototype = require('../context')
+
 function Controller() { }
 
 // Principal controller
 // Parses url and chooses the good controller to call
 Controller.prototype = {
 	// First method to call in order to configure the master controller
-	Init: function (contextService) {
-        this.contextService=contextService;
-        this.controllers = {};
-        var fs = require("fs"),
-            dossierControllers = "./controllers";
+	Init: function (securiteService, errorService, requestService, templateService) {
+		this.securiteService = securiteService;
+		this.errorService = errorService;
+		this.requestService = requestService;
+		this.templateService = templateService;
 
-        var directoryControllers = fs.readdirSync(dossierControllers);
-        for (var i in directoryControllers) {
-            var controllerName = directoryControllers[i].replace (".js", "");
-            if (controllerName != "controller") {
-                this.controllers[controllerName] = require("./" + directoryControllers[i]);
-                this.controllers[controllerName].Init(controllerName.replace ("Controller", ""), contextService);
-            }
-        }
+		this.controllers = {};
+
+		var fs = require("fs"), dossierControllers = "./controllers";
+
+		var directoryControllers = fs.readdirSync(dossierControllers);
+		for (var i in directoryControllers) {
+			var controllerName = directoryControllers[i].replace(".js", "");
+			if (controllerName != "controller")
+				this.controllers[controllerName] = require("./" + directoryControllers[i]);
+			
+		}
 	},
 	// Analyses and Executes the request of the client
 	ExecuteRequest: function (request, response) {
-        // We ommit the favicon
-        if (request.url == "/favicon.ico") {
-            response.end();
-            return;
-        }
+		// We ommit the favicon
+		if (request.url == "/favicon.ico") {
+			response.end();
+			return;
+		}
+
 		var req,
             // We Get the controller name, the action name and the arguments
             url = Url.parse(request.url, true),
             args = url.query;
 
-        var that = this;
-        benchmark.Compare ("tableau", "new",
-        function(){
-            req = that.contextService.requestService.GetControllerAndAction(url.pathname);
-            that.controllers[req.controller+"Controller"][req.action](args, response, req.ajax);
-        },
-        function(){
-            /*req = that.contextService.requestService.GetControllerAndAction(url.pathname);
-            var contextService = new ContextService();
-            contextService.Init(new SecuriteService(), new ErrorService(), new RequestService(), new TemplateService());
-            contextService.requestService.Init(url.pathname, response);
+		req = this.requestService.GetControllerAndAction(url.pathname);
+		// parsing to isolate controller and action names
 
-            reqVm = "resp = controller." + req.action + "(";
-            for (var arg in args) {
-                reqVm += "'" + args[arg] + "',";
-            }
-            if (reqVm[reqVm.length - 1] == ',')
-                reqVm = reqVm.substr(0, reqVm.length - 1);
-            reqVm += ");";
+		var controller = new this.controllers[req.controller + "Controller"]();
+		var context = new ContextPrototype();
 
-            // The context for the execution of the action
-            vmContext = {
-                resp: '',
-                controller: require("../controllers_bis/" + req.controller + "Controller")
-            };
+		context.args = args;
+		context.response = response;
+		context.isAjax = req.ajax;
 
-            vmContext.controller.Init(contextService);
+		context.securiteService = this.securiteService;
+		context.errorService = this.errorService;
+		context.requestService = this.requestService;
+		context.templateService = this.templateService;
 
-            Vm.runInNewContext(reqVm, vmContext);*/
+		context.actionName = req.action;
+		context.controllerName = req.controller + "Controller";
+		context.url = url;
 
-        }, 10000);
-        // parsing to isolate controller and action names
-
-        this.controllers[req.controller+"Controller"][req.action](args, response, req.ajax);
+		controller.Init(context);
+		controller[req.action]();
 	}
 };
 module.exports = new Controller();

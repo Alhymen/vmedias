@@ -4,7 +4,7 @@ var ControllerCore = require('./controllerCore.js');
 function HomeController() { }
 
 HomeController.prototype = ControllerCore.extend ({
-	index: function (args, response, isAjax) {
+	index: function () {
 		var MongoClient = mongo.MongoClient;
 		var that = this;
 		var Db = mongo.Db,
@@ -38,4 +38,5 @@ HomeController.prototype = ControllerCore.extend ({
         //this.RenderView ("coucou", response);
     }
 });
-module.exports = new HomeController();
+
+module.exports = HomeController;
