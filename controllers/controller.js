@@ -1,4 +1,5 @@
 var Url = require('url');
+var benchmark = require('../services/benchmarkService')
 var ContextPrototype = require('../context')
 
 function Controller() { }
@@ -25,40 +26,53 @@ Controller.prototype = {
 			
 		}
 	},
+
 	// Analyses and Executes the request of the client
 	ExecuteRequest: function (request, response) {
-		// We ommit the favicon
-		if (request.url == "/favicon.ico") {
-			response.end();
-			return;
-		}
 
-		var req,
-            // We Get the controller name, the action name and the arguments
-            url = Url.parse(request.url, true),
-            args = url.query;
+		var that = this;
+		benchmark.Compare("tableau", "new",
+        function () {
 
-		req = this.requestService.GetControllerAndAction(url.pathname);
-		// parsing to isolate controller and action names
+        	// We ommit the favicon
+        	if (request.url == "/favicon.ico") {
+        		response.end();
+        		return;
+        	}
 
-		var controller = new this.controllers[req.controller + "Controller"]();
-		var context = new ContextPrototype();
+        	var req,
+				// We Get the controller name, the action name and the arguments
+				url = Url.parse(request.url, true),
+				args = url.query;
 
-		context.args = args;
-		context.response = response;
-		context.isAjax = req.ajax;
+        	
 
-		context.securiteService = this.securiteService;
-		context.errorService = this.errorService;
-		context.requestService = this.requestService;
-		context.templateService = this.templateService;
+        	req = that.requestService.GetControllerAndAction(url.pathname);
+        	var controller = new that.controllers[req.controller + "Controller"]();
+        	var context = new ContextPrototype();
 
-		context.actionName = req.action;
-		context.controllerName = req.controller + "Controller";
-		context.url = url;
+        	context.args = args;
+        	context.response = response;
+        	context.isAjax = req.ajax;
 
-		controller.Init(context);
-		controller[req.action]();
+        	context.securiteService = that.securiteService;
+        	context.errorService = that.errorService;
+        	context.requestService = that.requestService;
+        	context.templateService = that.templateService;
+
+        	context.actionName = req.action;
+        	context.controllerName = req.controller + "Controller";
+        	context.url = url;
+
+        	controller.Init(context);
+        	controller[req.action]();
+        },
+        function () {
+        	
+
+        }, 100000);
+
+
 	}
 };
 module.exports = new Controller();
