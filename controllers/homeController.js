@@ -29,13 +29,13 @@ HomeController.prototype = ControllerCore.extend ({
 		});
 */
 
-/*        if (!isAjax) {
+        if (!isAjax) {
             result = this.contextService.templateService.DisplayViewHTML(this.GetTemplatePath("index"), paramsTpl);
         }
         else{
             result = this.contextService.templateService.DisplayViewJSON(paramsTpl);
-        }*/
-        //this.RenderView ("coucou", response);
+        }
+        this.RenderView (result, response);
     }
 });
 module.exports = new HomeController();

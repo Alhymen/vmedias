@@ -39,39 +39,7 @@ Controller.prototype = {
             url = Url.parse(request.url, true),
             args = url.query;
 
-        var that = this;
-        benchmark.Compare ("tableau", "new",
-        function(){
-            req = that.contextService.requestService.GetControllerAndAction(url.pathname);
-            that.controllers[req.controller+"Controller"][req.action](args, response, req.ajax);
-        },
-        function(){
-            /*req = that.contextService.requestService.GetControllerAndAction(url.pathname);
-            var contextService = new ContextService();
-            contextService.Init(new SecuriteService(), new ErrorService(), new RequestService(), new TemplateService());
-            contextService.requestService.Init(url.pathname, response);
-
-            reqVm = "resp = controller." + req.action + "(";
-            for (var arg in args) {
-                reqVm += "'" + args[arg] + "',";
-            }
-            if (reqVm[reqVm.length - 1] == ',')
-                reqVm = reqVm.substr(0, reqVm.length - 1);
-            reqVm += ");";
-
-            // The context for the execution of the action
-            vmContext = {
-                resp: '',
-                controller: require("../controllers_bis/" + req.controller + "Controller")
-            };
-
-            vmContext.controller.Init(contextService);
-
-            Vm.runInNewContext(reqVm, vmContext);*/
-
-        }, 10000);
-        // parsing to isolate controller and action names
-
+        req = this.contextService.requestService.GetControllerAndAction(url.pathname);
         this.controllers[req.controller+"Controller"][req.action](args, response, req.ajax);
 	}
 };
