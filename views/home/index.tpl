@@ -1,1 +1,0 @@
-coucou <%= that.name %>

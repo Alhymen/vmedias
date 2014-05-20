@@ -18,10 +18,18 @@ ControllerCore.prototype = {
 		return "./views/" + this.context.controllerName + "/" + name + ".tpl";
 	},
 
-	RenderView: function (res) {
-		// TODO gérer 302 via les etags et 200
+	RenderView: function (model) {
+
+		if (!this.context.isAjax) {
+			result = this.context.templateService.DisplayViewHTML(this.GetTemplatePath(this.context.actionName), model);
+		}
+		else {
+			result = this.context.templateService.DisplayViewJSON(model);
+		}
+
+
 		this.context.response.writeHead(200, { "Content-Type": "text/html" });
-		this.context.response.write(res);
+		this.context.response.write(result);
 		this.context.response.end();
 	}
 };

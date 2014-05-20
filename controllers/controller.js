@@ -1,6 +1,5 @@
 var Url = require('url');
-var benchmark = require('../services/benchmarkService')
-var ContextPrototype = require('../context')
+var ContextPrototype = require('../context');
 
 function Controller() { }
 
@@ -31,47 +30,39 @@ Controller.prototype = {
 	ExecuteRequest: function (request, response) {
 
 		var that = this;
-		benchmark.Compare("tableau", "new",
-        function () {
 
-        	// We ommit the favicon
-        	if (request.url == "/favicon.ico") {
-        		response.end();
-        		return;
-        	}
+	// We ommit the favicon
+        if (request.url == "/favicon.ico") {
+        	response.end();
+        	return;
+        }
 
-        	var req,
-				// We Get the controller name, the action name and the arguments
-				url = Url.parse(request.url, true),
-				args = url.query;
+        var req,
+			// We Get the controller name, the action name and the arguments
+			url = Url.parse(request.url, true),
+			args = url.query;
 
         	
 
-        	req = that.requestService.GetControllerAndAction(url.pathname);
-        	var controller = new that.controllers[req.controller + "Controller"]();
-        	var context = new ContextPrototype();
+        req = that.requestService.GetControllerAndAction(url.pathname);
+        var controller = new that.controllers[req.controller + "Controller"]();
+        var context = new ContextPrototype();
 
-        	context.args = args;
-        	context.response = response;
-        	context.isAjax = req.ajax;
+        context.args = args;
+        context.response = response;
+        context.isAjax = req.ajax;
 
-        	context.securiteService = that.securiteService;
-        	context.errorService = that.errorService;
-        	context.requestService = that.requestService;
-        	context.templateService = that.templateService;
+        context.securiteService = that.securiteService;
+        context.errorService = that.errorService;
+        context.requestService = that.requestService;
+        context.templateService = that.templateService;
 
-        	context.actionName = req.action;
-        	context.controllerName = req.controller + "Controller";
-        	context.url = url;
+        context.actionName = req.action;
+        context.controllerName = req.controller + "Controller";
+        context.url = url;
 
-        	controller.Init(context);
-        	controller[req.action]();
-        },
-        function () {
-        	
-
-        }, 100000);
-
+        controller.Init(context);
+        controller[req.action]();
 
 	}
 };
