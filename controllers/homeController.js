@@ -4,7 +4,8 @@ function HomeController() { }
 
 HomeController.prototype = ControllerCore.extend ({
 	index: function () {
-		var model = "hello word";
+		var model = {};
+		model.name = "sony";
 
 		this.RenderView(model);
     }

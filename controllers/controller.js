@@ -1,5 +1,6 @@
 var Url = require('url');
 var ContextPrototype = require('../context');
+var fs = require("fs");
 
 function Controller() { }
 
@@ -15,7 +16,7 @@ Controller.prototype = {
 
 		this.controllers = {};
 
-		var fs = require("fs"), dossierControllers = "./controllers";
+		var dossierControllers = "./controllers";
 
 		var directoryControllers = fs.readdirSync(dossierControllers);
 		for (var i in directoryControllers) {
@@ -31,8 +32,16 @@ Controller.prototype = {
 
 		var that = this;
 
-	// We ommit the favicon
-        if (request.url == "/favicon.ico") {
+		console.log("url 10 : " + request.url.substr(0, 9));
+
+		if (request.url == "/favicon.ico") {
+			response.end();
+			return;
+		}
+
+		if (request.url.substr(0, 9) == "/contents") {
+			//this.context.response.writeHead(200, { "Content-Type": "text/html" });
+			response.write(fs.readFileSync("." + request.url));
         	response.end();
         	return;
         }

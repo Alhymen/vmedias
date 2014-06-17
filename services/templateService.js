@@ -9,15 +9,23 @@ function TemplateService() {
 TemplateService.prototype = {
     DisplayViewHTML: function(pathTemplate, params) {
 //        var self = this;
-        var data = fs.readFileSync(pathTemplate);
-        if (!data){
+        var dataPage = fs.readFileSync(pathTemplate);
+        if (!dataPage) {
             throw "error";
         }
         // see with / no-with statement, best use is with "no-with". for this purpose, we need to add a reference object to underscore (this)
         underscore.extend(underscore.templateSettings, { variable: "that" } );
         // precompile is a better choice than templates sections
-        var preCompile = underscore.template (data.toString('utf8', 0, data.length));
-        return preCompile(params);
+        var preCompilePage = underscore.template(dataPage.toString('utf8', 0, dataPage.length));
+        var page = { "renderBody": preCompilePage(params) };
+
+        dataMaster = fs.readFileSync("./views/shared/master.tpl");
+        if (!dataMaster) {
+        	throw "error";
+        }
+
+        var preCompileMaster = underscore.template(dataMaster.toString('utf8', 0, dataMaster.length));
+        return preCompileMaster(page);
     },
     DisplayViewJSON: function(params) {
         return params;

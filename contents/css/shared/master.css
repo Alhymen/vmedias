@@ -1,0 +1,33 @@
+*{
+	padding: 0px;
+	margin: 0px;
+	font-family: Verdana, 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
+}
+
+html, body{
+	/*height: 100%;*/
+	/*position: relative;*/
+}
+
+.centerDiv, main{
+	margin: auto;
+	width: 80%;
+	min-width: 1000px;
+}
+
+main{
+	margin-top: 100px;
+	height: 10000px;
+}
+
+header{
+	position: fixed;
+	width: 100%;
+	background-color: #FAFAFA;
+	top: 0;
+	height: 75px;
+	background-image: url('/contents/images/shared/bgHeader.png');
+	background-position: bottom;
+	background-repeat: repeat-x;
+
+}
