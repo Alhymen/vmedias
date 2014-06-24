@@ -12,12 +12,13 @@ html, body{
 .centerDiv, main{
 	margin: auto;
 	width: 80%;
+	height: 100%;
 	min-width: 1000px;
 }
 
 main{
-	margin-top: 100px;
-	height: 10000px;
+	margin-top: 90px;
+
 }
 
 header{
@@ -30,4 +31,51 @@ header{
 	background-position: bottom;
 	background-repeat: repeat-x;
 
+}
+
+#logo{
+	float: left;
+	height: 65px;
+	width: 60px;
+	background-image: url('/contents/images/shared/logo.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#logoTitle{
+	float: left;
+	height: 67px;
+	width: 260px;
+	background-image: url('/contents/images/shared/logoTitle.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+header nav{
+	float: right;
+	line-height: 70px;
+	margin-right: 10px;
+}
+
+header nav ul li {
+	float: right;
+	list-style: none;
+	margin-left: 20px;
+	
+}
+
+header nav ul li span{
+	padding: 3px;
+}
+
+header nav ul li span:hover {
+	border-bottom: 3px black solid;
+}
+
+#omniBar {
+	width: 99%;
+	padding: 3px;
+	font-size: 20px;
+	border: 2px solid black;
 }

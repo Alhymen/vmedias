@@ -9,16 +9,18 @@
 	<body>
 		<header>
 			<div class="centerDiv">
-				<div id="logo">VMedia</div>
+				<div id="logo"></div>
+				<div id="logoTitle"></div>
 				<nav>
 					<ul>
-						<li>Home</li>
-						<li>Config</li>
+						<li><span>Home</span></li>
+						<li><span>Config</span></li>
 					</ul>
 				</nav>
 			</div>
 		</header>
 		<main>
+			<input type="text" id="omniBar" />
 			<%= that.renderBody %>
 		</main>
 	</body>
